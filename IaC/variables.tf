@@ -21,11 +21,21 @@ variable "dns_zone_name" {
   default     = "theoboursy-fr"
 }
 
+variable "image_tag" {
+  type        = string
+  description = "Container image tag to deploy."
+  default     = "latest"
+}
+
 locals {
   # config.json drives which services exist and which domains map to them.
   config = jsondecode(file("${path.module}/config.json"))
 
-  apps = { for a in local.config.apps : a.name => a }
+  apps = {
+    for a in local.config.apps : a.name => merge(a, {
+      image_url = format("%s:%s", a.image_url, var.image_tag)
+    })
+  }
 
   # One (app, subdomain) pair per custom domain to map.
   domain_bindings = {

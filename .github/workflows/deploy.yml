@@ -36,6 +36,7 @@ jobs:
       TF_VAR_region: ${{ vars.REGION }}
       TF_VAR_domain: ${{ vars.DOMAIN }}
       TF_VAR_dns_zone_name: ${{ vars.DNS_ZONE_NAME }}
+      TF_VAR_image_tag: ${{ github.sha }}
 
     steps:
       - name: Checkout
@@ -106,6 +107,7 @@ jobs:
       TF_VAR_region: ${{ vars.REGION }}
       TF_VAR_domain: ${{ vars.DOMAIN }}
       TF_VAR_dns_zone_name: ${{ vars.DNS_ZONE_NAME }}
+      TF_VAR_image_tag: ${{ github.sha }}
 
     steps:
       - name: Checkout
