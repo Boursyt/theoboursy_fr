@@ -1,0 +1,154 @@
+name: deploy infrastructure to GCP
+
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        description: "Deployment environment"
+        required: false
+        type: string
+        default: "prod"
+  workflow_dispatch:
+    inputs:
+      ENVIRONMENT:
+        description: "Deployment environment"
+        required: false
+        type: string
+        default: "prod"
+
+jobs:
+  tf-plan:
+    name: Run Terraform Plan
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: IaC
+    env:
+      ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+      WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
+      SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
+      TF_VAR_project_id: ${{ vars.PROJECT_ID }}
+      TF_VAR_region: ${{ vars.REGION }}
+      TF_VAR_domain: ${{ vars.DOMAIN }}
+      TF_VAR_dns_zone_name: ${{ vars.DNS_ZONE_NAME }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Login to Google
+        uses: google-github-actions/auth@v2
+        with:
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ vars.TFSTATE_BUCKET }}" \
+            -backend-config="prefix=infra"
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -out=tfplan.out
+
+      - name: Render plan to markdown
+        run: |
+          {
+            echo '```hcl'
+            terraform show -no-color tfplan.out
+            echo '```'
+          } > plan.md
+
+      - name: Comment on PR with Terraform Plan
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: IaC/plan.md
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform_plan_${{ inputs.ENVIRONMENT }}
+          path: |
+            IaC/tfplan.out
+            IaC/plan.md
+
+  tf-apply:
+    name: Run Terraform Apply
+    needs:
+      - tf-plan
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+    defaults:
+      run:
+        working-directory: IaC
+    env:
+      ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
+      WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
+      SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
+      TF_VAR_project_id: ${{ vars.PROJECT_ID }}
+      TF_VAR_region: ${{ vars.REGION }}
+      TF_VAR_domain: ${{ vars.DOMAIN }}
+      TF_VAR_dns_zone_name: ${{ vars.DNS_ZONE_NAME }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Plan from previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform_plan_${{ inputs.ENVIRONMENT }}
+          path: IaC
+
+      - name: Read Plan
+        id: readable-plan
+        uses: pCYSl5EDgo/cat@master
+        with:
+          path: IaC/plan.md
+
+      - name: Request manual approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: ${{ vars.APPROVERS }}
+          minimum-approvals: 1
+          issue-title: "Deploying infrastructure to ${{ inputs.ENVIRONMENT }}"
+          issue-body: ${{ steps.readable-plan.outputs.text }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Login to Google
+        uses: google-github-actions/auth@v2
+        with:
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ vars.TFSTATE_BUCKET }}" \
+            -backend-config="prefix=infra"
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve tfplan.out

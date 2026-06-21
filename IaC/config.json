@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "theoboursy-www",
+      "image_url": "europe-west1-docker.pkg.dev/PROJECT_ID/web/theoboursy-www:latest",
+      "subdomains": ["@", "www"]
+    },
+    {
+      "name": "theoboursy-ascii",
+      "image_url": "europe-west1-docker.pkg.dev/PROJECT_ID/web/theoboursy-ascii:latest",
+      "subdomains": ["ascii"]
+    }
+  ]
+}

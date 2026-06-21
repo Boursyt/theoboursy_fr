@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="img2ascii is a small Go CLI that turns images into clean ASCII art." />
+    <title>img2ascii - Images to ASCII</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="shell-grid" aria-hidden="true"></div>
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <p class="eyebrow"><span class="dot"></span>CLI tool written in Go</p>
+          <h1 id="title">img2ascii</h1>
+          <p class="lead">
+            A small Go CLI for turning images into clean ASCII art. Drop in a picture,
+            tune the output width, and get a copy-friendly render right in your terminal.
+          </p>
+          <div class="actions">
+            <a class="button" href="https://github.com/Boursyt/img2ascii">View on GitHub</a>
+          </div>
+        </div>
+
+        <article class="terminal" id="demo" aria-label="img2ascii terminal output example">
+          <div class="terminal-bar">
+            <div class="lights" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span>preview</span>
+          </div>
+          <div class="terminal-body">
+            <div class="prompt" aria-label="Command used to generate the preview">
+              <div><span class="prompt-muted">╭─  ❯</span> <span class="prompt-user">gopher@MacBook-Pro</span> <span class="prompt-muted">❯ ~</span></div>
+              <div><span class="prompt-muted">╰─</span> <span class="prompt-caret">$</span> <span class="prompt-command">img2ascii ~/Pictures/gopher/beautiful_gopher.png</span></div>
+            </div>
+            <pre>                               .:-=+**##%%%%%%##*+=-:.
+                          .=*#%@@%%##**++++++++**#%%@@%#+:  ....
+                 :=**#*=+%@@#*+=-----=============---=+*%@@%@@@@%#=.
+              :*@@%#**#%@*=---==++**##******#*++====--==:-+==---=#@@*.
+             +@@*-:-==- .-=--=====---+******=:-=**#**=--*+: -**+=::%@#
+            -@@+.+*+==:-*=:*%@@@@@@%*::****.-%@@@@@@@@%+.*#+: .+**::%@+
+            #%% +#=   +#-.%#+*%%%%%@@@:-**:-%=:=%%%%%%%@=.***- +*#= %%*
+            +@%::**: ***.*=  .=%%%%%%%*.** *=  .=%%%%%%@* ***#::*-.*@@:
+            .#@%=:- +***:-#:.=*%%%%@@@:-##=.#+=*%%%@@@@#.-***** :+%@%-
+              =#@%-.*****:-#%@@@@@@%*--+=-=::+#%%@%%%*=:=******-:@@*
+               *%%.=******=--=++++=----     .::-------=********+ #%#
+               #%# +********++====++:=++===+*+--**************** +%@.
+               %%# ****************=.##*++++##+.+***************.=@%-
+               %@# *****************+::++ +*.--+****************::@%=
+               %@# +****************#= %* #% =#*****************-:@@+
+               #@% +******************=:-=---*******************-.@@+
+               *%%.=********************************************-.@%+
+               =%@::********************************************=.%@+
+               :%%=.********************************************=.%%+
+             .=*@@+.********************************************=.@@%+-
+           :*@@#++-.********************************************= ==*%@%=
+          .%@*:-+*= ********************************************+ **=.+@@-
+          -@%+ -*+:.********************************************+ -+- =%@=
+           +@@*==*=.********************************************* =++#@@+
+            -*%@@@-:*********************************************.+@@#+:
+               +%%:-*********************************************.=%%:
+               *@%.=*********************************************:=@%-
+               #%% +*********************************************:=@%-
+               #@# +*********************************************.=@%:
+               #@# +********************************************* +%%.
+               #%% +********************************************+ #%#
+               +%@.-********************************************-:@@+
+               :@%+.******************************************** *%%.
+                #@%.=#****************************************#.-@@+
+                :%@# =#***************************************::%@#
+                 -%@#.-*************************************+:-%%*
+                  -%@@-.=+********************************=: =@@%.
+                 :#@%=-==--=+*************************+=-:=+*--%@#.
+                 %@#.:-%%*: :---==+++*********+++==----+=:=#*-.:%@+
+                 %@#. -+--*%@@%#*+==-----------==+*#%@@@@%=:=..+@@-
+                 :#@@*++#@@*-:=*#%%@@@@@@@@@@@@@%%#*+-: =#@@#%@@#-
+                   :+#%#*=.         ..:::::::..           :=++=:</pre>
+          </div>
+        </article>
+      </section>
+
+      <section class="install" id="usage" aria-label="Installation img2ascii">
+        <h2>Installation</h2>
+        <p>The install scripts automatically download the matching binary from the latest GitHub release.</p>
+        <div class="commands">
+          <div class="command">
+            <span>macOS / Linux</span>
+            <code>curl -fsSL https://raw.githubusercontent.com/Boursyt/img2ascii/refs/heads/main/install/install.sh | bash</code>
+          </div>
+          <div class="command">
+            <span>Windows PowerShell</span>
+            <code>$script = Join-Path $env:TEMP "install-img2ascii.ps1"; curl.exe -fsSL https://raw.githubusercontent.com/Boursyt/img2ascii/refs/heads/main/install/install.ps1 -o $script; powershell -ExecutionPolicy Bypass -NoProfile -File $script</code>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

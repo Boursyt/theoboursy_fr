@@ -1,0 +1,286 @@
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #eefaff;
+  --ink: #17212b;
+  --muted: #526575;
+  --go: #00add8;
+  --go-dark: #007d9c;
+  --line: #c9e9f2;
+  --shadow: 0 22px 54px rgba(0, 91, 116, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(180deg, rgba(0, 173, 216, 0.24), rgba(0, 173, 216, 0.08) 430px, transparent 760px),
+    var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+.shell-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, #000, transparent 70%);
+}
+
+main {
+  position: relative;
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 46px 0 40px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(380px, 0.95fr) minmax(0, 1.05fr);
+  gap: 42px;
+  align-items: center;
+  min-height: min(700px, calc(100vh - 96px));
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 0 0 22px;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 173, 216, 0.34);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--go-dark);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--go);
+  box-shadow: 0 0 0 4px rgba(0, 173, 216, 0.15);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(3.4rem, 6vw, 5.8rem);
+  line-height: 0.92;
+  letter-spacing: 0;
+  color: #101820;
+}
+
+.lead {
+  max-width: 610px;
+  margin: 26px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.08rem, 2vw, 1.34rem);
+  line-height: 1.62;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 19px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--go);
+  color: #ffffff;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 14px 30px rgba(0, 173, 216, 0.24);
+}
+
+.terminal {
+  overflow: hidden;
+  border: 1px solid #152b38;
+  border-radius: 8px;
+  background: #050b10;
+  box-shadow: var(--shadow);
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-bottom: 1px solid #152b38;
+  background: #0d1720;
+  color: #9fc7d5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.82rem;
+}
+
+.lights {
+  display: flex;
+  gap: 8px;
+}
+
+.lights span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.lights span:nth-child(1) {
+  background: #ff6b6b;
+}
+
+.lights span:nth-child(2) {
+  background: #ffd166;
+}
+
+.lights span:nth-child(3) {
+  background: #52d273;
+}
+
+pre {
+  overflow: auto;
+  margin: 0;
+  padding: 8px 18px 20px;
+  color: #d8f6ff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: clamp(0.48rem, 0.66vw, 0.62rem);
+  line-height: 1.08;
+}
+
+.terminal-body {
+  overflow: auto;
+  max-height: 660px;
+}
+
+.prompt {
+  padding: 18px 18px 6px;
+  color: #eafaff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: clamp(0.86rem, 1vw, 1rem);
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.prompt-muted {
+  color: #78aabc;
+}
+
+.prompt-user {
+  color: #7ee6ff;
+}
+
+.prompt-command {
+  color: #ffffff;
+}
+
+.prompt-caret {
+  color: var(--go);
+}
+
+.install {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.install p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.install h2 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.commands {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.command {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.command span {
+  display: block;
+  padding: 10px 12px 0;
+  color: var(--go-dark);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+code {
+  display: block;
+  padding: 10px 12px 12px;
+  color: #102a33;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 880px) {
+  main {
+    width: min(100% - 22px, 680px);
+    padding-top: 28px;
+  }
+
+  .hero,
+  .commands {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .terminal {
+    margin-top: 4px;
+  }
+
+  pre {
+    max-height: 440px;
+    font-size: 0.43rem;
+  }
+
+  .prompt {
+    font-size: 0.78rem;
+  }
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Personal homepage for Théo Boursy, Cloud Engineer." />
+    <title>Théo Boursy — Cloud Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="prompt">~/theoboursy.fr</span> <span class="cursor">█</span></span>
+        <nav class="topnav">
+          <a href="https://github.com/Boursyt">github</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="about" aria-labelledby="title">
+        <!-- terminal-style window -->
+        <div class="window">
+          <div class="window-bar">
+            <span class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+            <span class="window-title">whoami — bash</span>
+          </div>
+          <div class="window-body intro">
+            <img
+              class="profile-picture"
+              src="assets/profile.png"
+              alt="Théo Boursy's profile illustration"
+            />
+            <div class="intro-text">
+              <p class="eyebrow"><span class="dot"></span>// Cloud Engineer</p>
+              <h1 id="title">Théo&nbsp;Boursy</h1>
+              <p class="lead">
+                <span class="comment">/**</span><br />
+                <span class="comment">&nbsp;* Welcome to my page. I'm a Cloud Engineer interested in</span><br />
+                <span class="comment">&nbsp;* IT in general. Here you'll find my GitHub and links to</span><br />
+                <span class="comment">&nbsp;* small tools I build in my free time.</span><br />
+                <span class="comment">&nbsp;*/</span>
+              </p>
+              <div class="actions">
+                <a class="button primary" href="https://github.com/Boursyt">
+                  <span class="sigil">$</span> git clone @Boursyt
+                </a>
+              </div>
+              <ul class="stack" aria-label="Stack">
+                <li>go</li>
+                <li>python</li>
+                <li>gcp</li>
+                <li>aws</li>
+                <li>terraform</li>
+                <li>docker</li>
+                <li>kubernetes</li>
+                <li>linux</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" aria-labelledby="projects-title">
+        <div class="section-title">
+          <span class="hash">#</span>
+          <h2 id="projects-title">personal_projects</h2>
+          <span class="count">[1]</span>
+        </div>
+
+        <div class="projects">
+          <article class="project-card">
+            <div class="card-bar">
+              <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+              <span class="file">img2ascii.go</span>
+              <span class="tag">Go CLI</span>
+            </div>
+            <div class="card-body">
+              <p class="mono"><span class="key">host</span> = "ascii.theoboursy.fr"</p>
+              <h3>img2ascii</h3>
+              <p class="desc">
+                A small Go command-line tool that converts images into clean
+                ASCII output, with install scripts and a static project page.
+              </p>
+              <div class="actions">
+                <a class="button" href="https://ascii.theoboursy.fr">
+                  <span class="sigil">&rarr;</span> open project
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-hidden="true">
+      <span class="seg branch"><span class="git">⎇</span> main</span>
+      <span class="seg">UTF-8</span>
+      <span class="seg">LF</span>
+      <span class="seg right">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

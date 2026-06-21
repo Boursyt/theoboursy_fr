@@ -1,0 +1,29 @@
+name: ci
+
+# Orchestrator: build the images, then deploy the infrastructure.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    # Skip building on PRs — only plan the infra there.
+    if: ${{ github.event_name != 'pull_request' }}
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
+  deploy:
+    needs: build
+    # On PRs build is skipped, so don't require it; deploy still runs to plan.
+    if: ${{ always() && (needs.build.result == 'success' || github.event_name == 'pull_request') }}
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      ENVIRONMENT: prod
