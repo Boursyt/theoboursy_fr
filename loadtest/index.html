@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A distributed HTTP load-testing platform: Vegeta wrapped in a tiny Go service, running on Scaleway Serverless Containers, fanned out to thousands of requests per second and scaled back to zero."
+    />
+    <title>Load test platform, Scaleway</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="shell-grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="brand-prompt">~/theoboursy.fr/loadtest</span> <span class="cursor">█</span></span>
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="https://www.theoboursy.fr">home</a>
+          <a href="https://github.com/Boursyt/infra-loadtest">github</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow"><span class="dot"></span>Load Testing · Scaleway</p>
+        <h1 id="title">Load test platform</h1>
+        <p class="lead">
+          A distributed HTTP load-testing platform. It wraps Vegeta in a tiny Go
+          service and runs it on Scaleway Serverless Containers, so you can fan
+          out thousands of requests per second on demand and scale straight back
+          to zero when the test ends.
+        </p>
+        <div class="actions">
+          <a class="button" href="https://github.com/Boursyt/infra-loadtest">View on GitHub</a>
+        </div>
+        <ul class="stack" aria-label="Stack">
+          <li>go</li>
+          <li>vegeta</li>
+          <li>scaleway</li>
+          <li>serverless-containers</li>
+          <li>terraform</li>
+          <li>github-actions</li>
+        </ul>
+      </section>
+
+      <section class="board" aria-label="How the load test scales">
+        <!-- featured: the scaling story -->
+        <article class="card feature">
+          <div class="card-top">
+            <span class="tab">launch_loadtest.sh</span>
+            <span class="badge">how it scales</span>
+          </div>
+          <div class="card-body">
+            <h2>Fan out to amplify the load</h2>
+            <p>
+              Each request to the service triggers one container instance that
+              runs a Vegeta attack at a fixed rate. A launch script fires many of
+              them in parallel, so the aggregate throughput is simply
+              <strong>workers times rate per worker</strong>. Scaleway spins the
+              replicas up on demand, up to 29, then scales everything back to zero.
+            </p>
+            <p>
+              That turns a 1 vCPU container into a burst load generator without
+              running any always-on cluster. You pay for the seconds a test runs,
+              and nothing the rest of the time.
+            </p>
+            <pre class="snippet"><code>$ RATE=100 PARALLELISM=10 ./launch_loadtest.sh
+  workers:      10
+  rate/worker:  100 req/s
+  total rate:   1000 req/s
+  duration:     5m</code></pre>
+          </div>
+        </article>
+
+        <div class="grid3">
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">container_vegeta.tf</span>
+            </div>
+            <div class="card-body">
+              <h3>Serverless, scale to zero</h3>
+              <p>
+                The worker is a Scaleway Serverless Container. It scales from zero
+                on demand and caps out at 29 replicas, so there is no cluster to
+                run and idle time costs nothing.
+              </p>
+              <ul class="chips">
+                <li>min_scale = 0</li>
+                <li>max_scale = 29</li>
+                <li>1120m CPU</li>
+                <li>2048MB</li>
+                <li>concurrency = 3</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">main.go</span>
+            </div>
+            <div class="card-body">
+              <h3>Vegeta in a tiny Go service</h3>
+              <p>
+                A small Go server wraps the Vegeta library behind a single
+                endpoint. POST a target, rate and duration, and it runs the
+                attack and returns a plain-text metrics report.
+              </p>
+              <pre class="snippet"><code>POST /
+{
+  "target_url": "https://example.com",
+  "rate": 100,
+  "duration": "5m"
+}</code></pre>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">deploy.yml</span>
+            </div>
+            <div class="card-body">
+              <h3>IaC and CI/CD</h3>
+              <p>
+                Terraform provisions the whole setup on Scaleway. GitHub Actions
+                builds the image, pushes it to the Scaleway registry, plans on
+                pull requests, then applies to staging or production behind a
+                manual approval.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-hidden="true">
+      <span class="seg branch"><span class="git">⎇</span> main</span>
+      <span class="seg">UTF-8</span>
+      <span class="seg">LF</span>
+      <span class="seg right">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

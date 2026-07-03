@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="An economical, cloud-native Infrastructure as Code project: tiny Go binaries on Cloud Run, DNS straight to the service with no load balancer, running inside the free tier."
+    />
+    <title>Portfolio project, cloud-native IaC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="shell-grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="brand-prompt">~/theoboursy.fr/portfolio</span> <span class="cursor">█</span></span>
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="https://www.theoboursy.fr">home</a>
+          <a href="https://github.com/Boursyt/theoboursy_fr">github</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow"><span class="dot"></span>Infrastructure as Code · Google Cloud</p>
+        <h1 id="title">Portfolio project</h1>
+        <p class="lead">
+          The infrastructure behind this whole domain. No buckets, no servers to
+          babysit. Every site is a tiny Go binary shipped as its own Cloud Run
+          service, wired up by Terraform. Cheap, cloud-native, and extended by
+          editing a single JSON file.
+        </p>
+        <div class="actions">
+          <a class="button" href="https://github.com/Boursyt/theoboursy_fr">View on GitHub</a>
+        </div>
+        <ul class="stack" aria-label="Stack">
+          <li>go</li>
+          <li>terraform</li>
+          <li>cloud-run</li>
+          <li>cloud-dns</li>
+          <li>docker</li>
+          <li>github-actions</li>
+        </ul>
+      </section>
+
+      <section class="board" aria-label="How the infrastructure stays cheap">
+        <!-- featured: the cost story -->
+        <article class="card feature">
+          <div class="card-top">
+            <span class="tab">no-load-balancer.tf</span>
+            <span class="badge">the interesting bit</span>
+          </div>
+          <div class="card-body">
+            <h2>DNS points straight to Cloud Run</h2>
+            <p>
+              The usual way to expose Cloud Run on a custom domain is to put a
+              Google Cloud external HTTPS Load Balancer in front of it. The catch:
+              an HTTPS LB carries a fixed hourly cost just to exist, on the order
+              of <strong>~€18 / month</strong>, before it serves a single request.
+              For a few small personal sites, that is way too much.
+            </p>
+            <p>
+              So there is no load balancer here. Cloud DNS maps each domain
+              straight to its Cloud Run service: apex domains get Google-hosted
+              A/AAAA records, subdomains get a CNAME to
+              <code>ghs.googlehosted.com</code>, and Cloud Run domain mappings
+              terminate TLS with a Google-managed certificate. Same HTTPS, custom
+              domains, automatic certs, without the fixed monthly bill.
+            </p>
+            <div class="ledger" role="group" aria-label="Cost comparison">
+              <div class="ledger-row bad">
+                <span class="ledger-label">External HTTPS Load Balancer</span>
+                <span class="ledger-value">~€18+/mo, always on</span>
+              </div>
+              <div class="ledger-row good">
+                <span class="ledger-label">Cloud DNS to Cloud Run (this setup)</span>
+                <span class="ledger-value">≈ €0, free tier</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="grid3">
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">finops.tf</span>
+            </div>
+            <div class="card-body">
+              <h3>Almost free by design</h3>
+              <p>
+                Every service is tuned to sit inside the Cloud Run free tier, a
+                generous monthly allowance that easily covers personal traffic.
+                Combined with the no load balancer approach, the running cost
+                rounds to zero.
+              </p>
+              <ul class="chips">
+                <li>min_instance_count = 0</li>
+                <li>cpu_idle = true</li>
+                <li>128Mi</li>
+                <li>max_instance_count = 2</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">main.go</span>
+            </div>
+            <div class="card-body">
+              <h3>Cloud-native Go, from scratch</h3>
+              <p>
+                One shared Go server embeds each site with <code>embed.FS</code>
+                and compiles to a static binary that runs on a
+                <code>scratch</code> image, no OS and no libc. The image is tiny
+                and the cold start is near zero, which is what makes scaling to
+                zero painless.
+              </p>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">config.json</span>
+            </div>
+            <div class="card-body">
+              <h3>Add a site in one entry</h3>
+              <p>
+                A single <code>config.json</code> drives which services exist and
+                which domains map to them. Adding a project is one object.
+              </p>
+              <pre class="snippet"><code>{
+  "name": "theoboursy-portfolio",
+  "image_url": "IMAGE_URL",
+  "subdomains": ["portfolio"]
+}</code></pre>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-hidden="true">
+      <span class="seg branch"><span class="git">⎇</span> main</span>
+      <span class="seg">UTF-8</span>
+      <span class="seg">LF</span>
+      <span class="seg right">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

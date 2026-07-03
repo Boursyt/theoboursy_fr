@@ -9,6 +9,31 @@
       "name": "theoboursy-ascii",
       "image_url": "europe-west1-docker.pkg.dev/theoboursy-fr/web/theoboursy-ascii",
       "subdomains": ["ascii"]
+    },
+    {
+      "name": "theoboursy-portfolio",
+      "image_url": "europe-west1-docker.pkg.dev/theoboursy-fr/web/theoboursy-portfolio",
+      "subdomains": ["portfolio"]
+    },
+    {
+      "name": "theoboursy-loadtest",
+      "image_url": "europe-west1-docker.pkg.dev/theoboursy-fr/web/theoboursy-loadtest",
+      "subdomains": ["loadtest"]
+    },
+    {
+      "name": "theoboursy-monitoring",
+      "image_url": "europe-west1-docker.pkg.dev/theoboursy-fr/web/theoboursy-monitoring",
+      "subdomains": ["monitoring"]
+    },
+    {
+      "name": "theoboursy-dockeronline",
+      "image_url": "europe-west1-docker.pkg.dev/theoboursy-fr/web/theoboursy-dockeronline",
+      "subdomains": ["dockeronline"]
+    },
+    {
+      "name": "theoboursy-gopher",
+      "image_url": "europe-west1-docker.pkg.dev/theoboursy-fr/web/theoboursy-gopher",
+      "subdomains": ["gopher"]
     }
   ]
 }

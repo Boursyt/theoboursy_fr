@@ -386,7 +386,6 @@ h1 {
 }
 
 .card-bar .tag {
-  margin-left: auto;
   font-family: var(--mono);
   font-size: 0.74rem;
   font-weight: 700;
@@ -395,6 +394,54 @@ h1 {
   border: 1px solid rgba(0, 173, 216, 0.3);
   border-radius: 999px;
   padding: 3px 9px;
+}
+
+/* keep tags grouped on the right: only the first one pushes off the filename */
+.card-bar .file + .tag {
+  margin-left: auto;
+}
+
+/* per-technology accents */
+.card-bar .tag.go {
+  color: #007d9c;
+  background: #e6f8fd;
+  border-color: rgba(0, 173, 216, 0.45);
+}
+
+.card-bar .tag.gcp {
+  color: #188038;
+  background: #e7f5ec;
+  border-color: rgba(52, 168, 83, 0.45);
+}
+
+.card-bar .tag.scaleway {
+  color: #6d28d9;
+  background: #f3ebfe;
+  border-color: rgba(124, 58, 237, 0.45);
+}
+
+.card-bar .tag.aws {
+  color: #c05600;
+  background: #fff1e3;
+  border-color: rgba(255, 153, 0, 0.5);
+}
+
+.card-bar .tag.docker {
+  color: #1d63ed;
+  background: #e9f1fe;
+  border-color: rgba(29, 99, 237, 0.45);
+}
+
+.card-bar .tag.django {
+  color: #0c4b33;
+  background: #e4f0ea;
+  border-color: rgba(12, 75, 51, 0.4);
+}
+
+.card-bar .tag.python {
+  color: #8a6d00;
+  background: #fbf4d1;
+  border-color: rgba(214, 180, 40, 0.55);
 }
 
 .card-body {

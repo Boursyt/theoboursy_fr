@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Hall of Gopher: a Go image-gallery web app on Cloud Run, with a Cloud Function that crops uploads and an ultra-optimized multi-stage Dockerfile that ships on a scratch image."
+    />
+    <title>Hall of Gopher, Go web app on Cloud Run</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="shell-grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="brand-prompt">~/theoboursy.fr/gopher</span> <span class="cursor">█</span></span>
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="https://www.theoboursy.fr">home</a>
+          <a href="https://github.com/Boursyt/hall_of_gopher">github</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow"><span class="dot"></span>Go web app · Google Cloud</p>
+        <h1 id="title">Hall of Gopher</h1>
+        <p class="lead">
+          A Go image gallery. Visitors upload a photo with their name, a Cloud
+          Function crops every image to the same size, and a live slider shows
+          the processed gallery, updating without a page reload. It runs on Cloud
+          Run behind an ultra-optimized multi-stage Docker build.
+        </p>
+        <div class="actions">
+          <a class="button" href="https://github.com/Boursyt/hall_of_gopher">View on GitHub</a>
+        </div>
+        <ul class="stack" aria-label="Stack">
+          <li>go</li>
+          <li>cloud-run</li>
+          <li>cloud-storage</li>
+          <li>cloud-functions</li>
+          <li>docker</li>
+          <li>gitlab-ci</li>
+        </ul>
+      </section>
+
+      <section class="board" aria-label="How the app is built">
+        <!-- featured: the optimized Dockerfile -->
+        <article class="card feature">
+          <div class="card-top">
+            <span class="tab">Dockerfile</span>
+            <span class="badge">the interesting bit</span>
+          </div>
+          <div class="card-body">
+            <h2>One Dockerfile, three stages</h2>
+            <p>
+              A single multi-stage Dockerfile covers the whole lifecycle. The
+              <strong>build</strong> stage compiles a static Go binary with
+              <code>CGO_ENABLED=0</code> and stripped symbols. The
+              <strong>dev</strong> stage runs it with <code>air</code> for hot
+              reload. The <strong>prod</strong> stage starts from
+              <code>scratch</code> and copies in only the binary, the CA
+              certificates and the assets.
+            </p>
+            <p>
+              The result is a tiny image with no OS underneath and a near-zero
+              cold start, which is exactly what a scale-to-zero Cloud Run service
+              wants.
+            </p>
+            <pre class="snippet"><code>FROM scratch AS prod
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=build /server /server
+COPY app/templates/ /templates/
+COPY app/static/ /static/
+ENTRYPOINT ["/server"]</code></pre>
+          </div>
+        </article>
+
+        <div class="grid3">
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">function.go</span>
+            </div>
+            <div class="card-body">
+              <h3>Upload, crop, display</h3>
+              <p>
+                An upload lands in a Cloud Storage bucket under
+                <code>img/before/</code>. That triggers a Go Cloud Function which
+                center-crops the image and writes it to <code>img/after/</code>,
+                so every picture in the gallery shares the same clean format.
+              </p>
+              <ul class="chips">
+                <li>GCS event trigger</li>
+                <li>center crop 800x600</li>
+                <li>JPEG quality 85</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">main.go</span>
+            </div>
+            <div class="card-body">
+              <h3>Live gallery, no reload</h3>
+              <p>
+                The home page polls a JSON API and slides new images in as they
+                are processed, each labelled with its uploader. Signed URLs are
+                cached for 30 minutes to avoid flicker, and a QR code links
+                straight back to the gallery.
+              </p>
+              <ul class="chips">
+                <li>/api/images</li>
+                <li>signed URLs, 30 min</li>
+                <li>QR code</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">.gitlab-ci.yml</span>
+            </div>
+            <div class="card-body">
+              <h3>Cloud Run and GitLab CI</h3>
+              <p>
+                Cloud Build ships the image to Artifact Registry and GitLab CI
+                deploys it to Cloud Run. As a study-project requirement there is
+                no Terraform here, just container images and Cloud Run service
+                config.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-hidden="true">
+      <span class="seg branch"><span class="git">⎇</span> main</span>
+      <span class="seg">UTF-8</span>
+      <span class="seg">LF</span>
+      <span class="seg right">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

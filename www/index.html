@@ -74,7 +74,7 @@
         <div class="section-title">
           <span class="hash">#</span>
           <h2 id="projects-title">personal_projects</h2>
-          <span class="count">[1]</span>
+          <span class="count">[6]</span>
         </div>
 
         <div class="projects">
@@ -82,7 +82,7 @@
             <div class="card-bar">
               <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
               <span class="file">img2ascii.go</span>
-              <span class="tag">Go CLI</span>
+              <span class="tag go">Go</span>
             </div>
             <div class="card-body">
               <p class="mono"><span class="key">host</span> = "ascii.theoboursy.fr"</p>
@@ -93,6 +93,123 @@
               </p>
               <div class="actions">
                 <a class="button" href="https://ascii.theoboursy.fr">
+                  <span class="sigil">&rarr;</span> open project
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="card-bar">
+              <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+              <span class="file">infra.tf</span>
+              <span class="tag gcp">GCP</span>
+              <span class="tag go">Go</span>
+            </div>
+            <div class="card-body">
+              <p class="mono"><span class="key">host</span> = "portfolio.theoboursy.fr"</p>
+              <h3>portfolio</h3>
+              <p class="desc">
+                The cloud-native IaC behind this domain: tiny Go binaries on
+                Cloud Run, near-zero cold start, and one-JSON-file
+                extensibility, all tuned for the free tier.
+              </p>
+              <div class="actions">
+                <a class="button" href="https://portfolio.theoboursy.fr">
+                  <span class="sigil">&rarr;</span> open project
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="card-bar">
+              <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+              <span class="file">loadtest.go</span>
+              <span class="tag scaleway">Scaleway</span>
+              <span class="tag go">Go</span>
+            </div>
+            <div class="card-body">
+              <p class="mono"><span class="key">host</span> = "loadtest.theoboursy.fr"</p>
+              <h3>infra-loadtest</h3>
+              <p class="desc">
+                A distributed load tester: Vegeta wrapped in Go on Scaleway
+                serverless containers, fanning out parallel workers to burst
+                thousands of req/s, then scaling to zero.
+              </p>
+              <div class="actions">
+                <a class="button" href="https://github.com/Boursyt/infra-loadtest">
+                  <span class="sigil">&rarr;</span> open project
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="card-bar">
+              <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+              <span class="file">monitoring.tf</span>
+              <span class="tag aws">AWS</span>
+              <span class="tag gcp">GCP</span>
+            </div>
+            <div class="card-body">
+              <p class="mono"><span class="key">host</span> = "monitoring.theoboursy.fr"</p>
+              <h3>infra-monitoring</h3>
+              <p class="desc">
+                Serverless Grafana on AWS Lambda reading GCP metrics through
+                Workload Identity Federation, no static keys, with RDS state and
+                CloudFront TLS.
+              </p>
+              <div class="actions">
+                <a class="button" href="https://github.com/Boursyt/infra-monitoring">
+                  <span class="sigil">&rarr;</span> open project
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="card-bar">
+              <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+              <span class="file">dockeronline.py</span>
+              <span class="tag python">Python</span>
+              <span class="tag django">Django</span>
+              <span class="tag docker">Docker</span>
+            </div>
+            <div class="card-body">
+              <p class="mono"><span class="key">host</span> = "dockeronline.theoboursy.fr"</p>
+              <h3>docker-online</h3>
+              <p class="desc">
+                A Master 1 mini-PaaS: deploy an image, Dockerfile or compose via
+                the Docker SDK, with Traefik routing and automatic OVH DNS per
+                subdomain.
+              </p>
+              <div class="actions">
+                <a class="button" href="https://github.com/Boursyt/M1_dockerOnline">
+                  <span class="sigil">&rarr;</span> open project
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="card-bar">
+              <span class="traffic sm"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+              <span class="file">hall_of_gopher.go</span>
+              <span class="tag go">Go</span>
+              <span class="tag gcp">GCP</span>
+              <span class="tag docker">Docker</span>
+            </div>
+            <div class="card-body">
+              <p class="mono"><span class="key">host</span> = "gopher.theoboursy.fr"</p>
+              <h3>hall-of-gopher</h3>
+              <p class="desc">
+                A Go image gallery on Cloud Run: uploads are cropped by a Cloud
+                Function and shown in a live slider, behind an ultra-optimized
+                multi-stage Dockerfile that ships on scratch.
+              </p>
+              <div class="actions">
+                <a class="button" href="https://github.com/Boursyt/hall_of_gopher">
                   <span class="sigil">&rarr;</span> open project
                 </a>
               </div>

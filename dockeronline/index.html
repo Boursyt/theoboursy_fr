@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A self-service container hosting platform: deploy a Docker container from an image, Dockerfile or compose file and get a live subdomain, with Traefik routing and automatic OVH DNS."
+    />
+    <title>Docker Online, container hosting platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="shell-grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="brand-prompt">~/theoboursy.fr/dockeronline</span> <span class="cursor">█</span></span>
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="https://www.theoboursy.fr">home</a>
+          <a href="https://github.com/Boursyt/M1_dockerOnline">github</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow"><span class="dot"></span>Mini-PaaS · Master 1 project</p>
+        <h1 id="title">Docker Online</h1>
+        <p class="lead">
+          A self-service mini-PaaS. Users sign in, push an image, a Dockerfile or
+          a compose file, and the platform deploys it on a remote Docker host,
+          wires up Traefik routing and creates the DNS record, so the container
+          is instantly live on its own subdomain.
+        </p>
+        <div class="actions">
+          <a class="button" href="https://github.com/Boursyt/M1_dockerOnline">View on GitHub</a>
+        </div>
+        <ul class="stack" aria-label="Stack">
+          <li>python</li>
+          <li>django</li>
+          <li>docker-sdk</li>
+          <li>traefik</li>
+          <li>ovh-api</li>
+          <li>prometheus</li>
+          <li>proxmox</li>
+        </ul>
+      </section>
+
+      <section class="board" aria-label="How the platform works">
+        <!-- featured: the deploy flow -->
+        <article class="card feature">
+          <div class="card-top">
+            <span class="tab">s_docker.py</span>
+            <span class="badge">the interesting bit</span>
+          </div>
+          <div class="card-body">
+            <h2>Deploy a container, get a live URL</h2>
+            <p>
+              A user submits an image name, a Dockerfile or a compose file. The
+              Docker SDK builds and runs it on a remote host, then the container
+              is tagged with Traefik labels so the reverse proxy routes traffic
+              to it, and an OVH DNS record is created for its name.
+            </p>
+            <p>
+              Seconds later the app is reachable at
+              <code>&lt;name&gt;.dockeronline.ovh</code>, with ports and volumes
+              provisioned automatically. No manual proxy config, no manual DNS.
+            </p>
+            <pre class="snippet"><code>labels = {
+  "traefik.enable": "true",
+  "traefik.http.routers.NAME.rule":
+      "Host(`NAME.dockeronline.ovh`)",
+  "traefik.http.routers.NAME.entrypoints": "web",
+}</code></pre>
+          </div>
+        </article>
+
+        <div class="grid3">
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">docker · TLS</span>
+            </div>
+            <div class="card-body">
+              <h3>Docker SDK over TLS</h3>
+              <p>
+                The whole container lifecycle is driven through the Docker SDK
+                for Python, talking to a remote daemon secured with client
+                certificates. Pull, build, run, inspect, stream logs and remove,
+                all from Django.
+              </p>
+              <ul class="chips">
+                <li>pull image</li>
+                <li>build Dockerfile</li>
+                <li>run compose</li>
+                <li>logs and errors</li>
+                <li>mTLS client certs</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">s_ovh.py</span>
+            </div>
+            <div class="card-body">
+              <h3>Traefik and OVH DNS</h3>
+              <p>
+                Each container gets a Traefik route through its labels and a
+                matching A record on the OVH zone, created and deleted with the
+                container. Every deployment lands on its own subdomain with no
+                shared ports to juggle.
+              </p>
+              <ul class="chips">
+                <li>per-container subdomain</li>
+                <li>OVH API records</li>
+                <li>traefik-net</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">s_prometheus.py</span>
+            </div>
+            <div class="card-body">
+              <h3>Admin metrics</h3>
+              <p>
+                An admin dashboard queries Prometheus with PromQL for live CPU,
+                RAM and disk gauges of the host. Django auth keeps user and admin
+                areas apart, and the whole stack runs on Proxmox.
+              </p>
+              <ul class="chips">
+                <li>PromQL</li>
+                <li>CPU / RAM / disk</li>
+                <li>SQLite</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-hidden="true">
+      <span class="seg branch"><span class="git">⎇</span> main</span>
+      <span class="seg">UTF-8</span>
+      <span class="seg">LF</span>
+      <span class="seg right">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

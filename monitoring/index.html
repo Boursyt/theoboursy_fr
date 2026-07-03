@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A serverless Grafana monitoring platform: Grafana on AWS Lambda reading Google Cloud metrics through Workload Identity Federation, with no static keys."
+    />
+    <title>Monitoring platform, AWS and GCP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="shell-grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="brand-prompt">~/theoboursy.fr/monitoring</span> <span class="cursor">█</span></span>
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="https://www.theoboursy.fr">home</a>
+          <a href="https://github.com/Boursyt/infra-monitoring">github</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow"><span class="dot"></span>Monitoring · AWS + GCP</p>
+        <h1 id="title">Monitoring platform</h1>
+        <p class="lead">
+          A serverless Grafana platform that lives on AWS but watches Google
+          Cloud. Grafana runs on AWS Lambda and reads GCP metrics through
+          Workload Identity Federation, so there is no server to keep alive and
+          no static cross-cloud key to leak.
+        </p>
+        <div class="actions">
+          <a class="button" href="https://github.com/Boursyt/infra-monitoring">View on GitHub</a>
+        </div>
+        <ul class="stack" aria-label="Stack">
+          <li>grafana</li>
+          <li>aws-lambda</li>
+          <li>gcp</li>
+          <li>workload-identity</li>
+          <li>rds</li>
+          <li>cloudfront</li>
+          <li>terraform</li>
+        </ul>
+      </section>
+
+      <section class="board" aria-label="How the monitoring platform works">
+        <!-- featured: cross-cloud keyless auth -->
+        <article class="card feature">
+          <div class="card-top">
+            <span class="tab">oidc-provider.tf</span>
+            <span class="badge">the interesting bit</span>
+          </div>
+          <div class="card-body">
+            <h2>Cross-cloud access, with no static keys</h2>
+            <p>
+              Grafana runs on AWS but reads metrics from Google Cloud, and it
+              does so without a single stored credential. At startup the
+              container writes a GCP external account credential file. The Google
+              SDK then trades an AWS <code>GetCallerIdentity</code> token for a
+              short-lived GCP access token through a Workload Identity Pool.
+            </p>
+            <p>
+              The Lambda execution role is bound to a GCP service account with
+              <strong>monitoring.viewer</strong>, so the AWS identity alone
+              unlocks GCP metrics. Nothing to rotate, nothing to leak.
+            </p>
+            <pre class="snippet"><code>AWS Lambda role
+   └─ STS GetCallerIdentity token
+      └─ GCP Workload Identity Pool
+         └─ short-lived access token
+            └─ GCP service account (monitoring.viewer)
+               └─ Cloud Monitoring API</code></pre>
+          </div>
+        </article>
+
+        <div class="grid3">
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">lambda_grafana.tf</span>
+            </div>
+            <div class="card-body">
+              <h3>Serverless Grafana</h3>
+              <p>
+                Grafana ships as a container and runs behind the AWS Lambda Web
+                Adapter, exposed through a Lambda Function URL. There is no
+                instance to keep warm: it scales to zero and bills per request.
+              </p>
+              <ul class="chips">
+                <li>Lambda Web Adapter</li>
+                <li>Function URL</li>
+                <li>1769MB</li>
+                <li>900s timeout</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">database.tf</span>
+            </div>
+            <div class="card-body">
+              <h3>State and edge</h3>
+              <p>
+                Dashboards and users persist in RDS PostgreSQL over SSL.
+                CloudFront with an ACM certificate terminates TLS on the custom
+                domain, and Google OAuth restricts sign-in to the org domain.
+              </p>
+              <ul class="chips">
+                <li>RDS PostgreSQL 16</li>
+                <li>db.t4g.micro</li>
+                <li>CloudFront + ACM</li>
+                <li>Google OAuth</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="tab">deploy.yml</span>
+            </div>
+            <div class="card-body">
+              <h3>IaC and CI/CD, all OIDC</h3>
+              <p>
+                Terraform provisions everything across both clouds, and the
+                pipeline is keyless end to end. GitHub OIDC federates into GCP and
+                assumes an AWS role, so no long-lived cloud credentials ever live
+                in the repo.
+              </p>
+              <ul class="chips">
+                <li>GitHub OIDC to GCP</li>
+                <li>OIDC to AWS role</li>
+                <li>plan on PR</li>
+                <li>approve to apply</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar" aria-hidden="true">
+      <span class="seg branch"><span class="git">⎇</span> main</span>
+      <span class="seg">UTF-8</span>
+      <span class="seg">LF</span>
+      <span class="seg right">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

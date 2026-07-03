@@ -10,6 +10,11 @@ The project avoids traditional bucket hosting. Each site is packaged into a tiny
 | --- | --- |
 | [`www/`](www/) | Personal portfolio and resume site, served on `theoboursy.fr` and `www.theoboursy.fr`. |
 | [`img2ascii/`](img2ascii/) | Static project page for the `img2ascii` image-to-ASCII tool, served on `ascii.theoboursy.fr`. |
+| [`portfolio/`](portfolio/) | Project page summarizing this cloud-native IaC monorepo, served on `portfolio.theoboursy.fr`. |
+| [`loadtest/`](loadtest/) | Project page for the `infra-loadtest` Scaleway load-testing platform, served on `loadtest.theoboursy.fr`. |
+| [`monitoring/`](monitoring/) | Project page for the `infra-monitoring` cross-cloud Grafana platform, served on `monitoring.theoboursy.fr`. |
+| [`dockeronline/`](dockeronline/) | Project page for the `M1_dockerOnline` self-service container platform, served on `dockeronline.theoboursy.fr`. |
+| [`gopher/`](gopher/) | Project page for the `hall_of_gopher` Go image-gallery app, served on `gopher.theoboursy.fr`. |
 | [`server/`](server/) | Shared Go static-file server using `embed.FS` to compile site assets into the binary. |
 | [`IaC/`](IaC/) | Terraform configuration for Cloud Run v2, Cloud DNS, domain mappings and IAM. |
 | [`.github/workflows/`](.github/workflows/) | GitHub Actions workflows for image builds and Terraform deployment. |
@@ -61,6 +66,11 @@ Apps are configured in [`IaC/config.json`](IaC/config.json):
 | --- | --- | --- | --- |
 | Portfolio | `www/` | `theoboursy-www` | `theoboursy.fr`, `www.theoboursy.fr` |
 | img2ascii | `img2ascii/` | `theoboursy-ascii` | `ascii.theoboursy.fr` |
+| Portfolio (IaC) | `portfolio/` | `theoboursy-portfolio` | `portfolio.theoboursy.fr` |
+| Load test | `loadtest/` | `theoboursy-loadtest` | `loadtest.theoboursy.fr` |
+| Monitoring | `monitoring/` | `theoboursy-monitoring` | `monitoring.theoboursy.fr` |
+| Docker Online | `dockeronline/` | `theoboursy-dockeronline` | `dockeronline.theoboursy.fr` |
+| Hall of Gopher | `gopher/` | `theoboursy-gopher` | `gopher.theoboursy.fr` |
 
 ## FinOps Notes
 

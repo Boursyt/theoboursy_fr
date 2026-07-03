@@ -26,6 +26,16 @@ jobs:
             image: theoboursy-www
           - site: img2ascii
             image: theoboursy-ascii
+          - site: portfolio
+            image: theoboursy-portfolio
+          - site: loadtest
+            image: theoboursy-loadtest
+          - site: monitoring
+            image: theoboursy-monitoring
+          - site: dockeronline
+            image: theoboursy-dockeronline
+          - site: gopher
+            image: theoboursy-gopher
 
     steps:
       - name: Checkout
