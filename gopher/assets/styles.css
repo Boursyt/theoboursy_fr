@@ -1,19 +1,45 @@
 :root {
   color-scheme: light;
   --bg: #ffffff;
+  --card: #ffffff;
   --surface: #eefaff;
   --ink: #17212b;
+  --heading: #101820;
   --muted: #526575;
+  --faint: #8a9aa4;
   --go: #00add8;
   --go-dark: #007d9c;
+  --accent-text: #007d9c;
   --line: #c9e9f2;
   --good: #1a8c5a;
   --bad: #c2185b;
+  --topbar-bg: rgba(255, 255, 255, 0.82);
   --shadow: 0 22px 54px rgba(0, 91, 116, 0.12);
+  --card-shadow: 0 10px 26px rgba(0, 91, 116, 0.06);
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", monospace;
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1016;
+  --card: #121b24;
+  --surface: #0f1720;
+  --ink: #c7d3dc;
+  --heading: #eaf2f7;
+  --muted: #8ea0ac;
+  --faint: #5b6c78;
+  --go: #12c2ef;
+  --go-dark: #0b4d5f;
+  --accent-text: #4fd3f4;
+  --line: #223543;
+  --good: #3ecb8b;
+  --bad: #ff77a0;
+  --topbar-bg: rgba(11, 16, 22, 0.82);
+  --shadow: 0 22px 54px rgba(0, 0, 0, 0.5);
+  --card-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
 }
 
 * {
@@ -34,6 +60,7 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 a {
@@ -58,7 +85,7 @@ a {
   top: 0;
   z-index: 20;
   border-bottom: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.82);
+  background: var(--topbar-bg);
   backdrop-filter: blur(10px);
 }
 
@@ -79,7 +106,7 @@ a {
 }
 
 .brand-prompt {
-  color: var(--go-dark);
+  color: var(--accent-text);
 }
 
 .cursor {
@@ -95,6 +122,7 @@ a {
 
 .topnav {
   display: flex;
+  align-items: center;
   gap: 22px;
   font-family: var(--mono);
   font-size: 0.86rem;
@@ -109,11 +137,46 @@ a {
 .topnav a::before {
   content: "/";
   margin-right: 2px;
-  color: #8a9aa4;
+  color: var(--faint);
 }
 
 .topnav a:hover {
-  color: var(--go-dark);
+  color: var(--accent-text);
+}
+
+/* ---------- theme toggle ---------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--card);
+  color: var(--accent-text);
+  font-size: 0.92rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--go);
+  color: var(--go);
+}
+
+.theme-toggle .icon-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-light {
+  display: inline;
 }
 
 /* ---------- layout ---------- */
@@ -138,8 +201,8 @@ main {
   padding: 8px 12px;
   border: 1px solid rgba(0, 173, 216, 0.34);
   border-radius: 999px;
-  background: #ffffff;
-  color: var(--go-dark);
+  background: var(--card);
+  color: var(--accent-text);
   font-size: 0.86rem;
   font-weight: 700;
 }
@@ -156,7 +219,7 @@ h1 {
   margin: 0;
   font-size: clamp(3rem, 6vw, 5rem);
   line-height: 0.92;
-  color: #101820;
+  color: var(--heading);
 }
 
 .lead {
@@ -195,6 +258,14 @@ h1 {
   background: var(--go-dark);
 }
 
+:root[data-theme="dark"] .button {
+  color: #05141b;
+}
+
+:root[data-theme="dark"] .button:hover {
+  color: #eaf8fd;
+}
+
 /* stack chips */
 .stack {
   display: flex;
@@ -208,8 +279,8 @@ h1 {
 .stack li {
   font-family: var(--mono);
   font-size: 0.78rem;
-  color: var(--go-dark);
-  background: #ffffff;
+  color: var(--accent-text);
+  background: var(--card);
   border: 1px solid rgba(0, 173, 216, 0.28);
   border-radius: 6px;
   padding: 4px 9px;
@@ -218,7 +289,7 @@ h1 {
 .stack li::before {
   content: "#";
   margin-right: 1px;
-  color: #8a9aa4;
+  color: var(--faint);
 }
 
 /* ---------- board of cards ---------- */
@@ -240,8 +311,8 @@ h1 {
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 10px 26px rgba(0, 91, 116, 0.06);
+  background: var(--card);
+  box-shadow: var(--card-shadow);
   transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
 }
 
@@ -266,7 +337,7 @@ h1 {
   padding-left: 16px;
   font-family: var(--mono);
   font-size: 0.8rem;
-  color: var(--go-dark);
+  color: var(--accent-text);
 }
 
 .card-top .tab::before {
@@ -294,6 +365,10 @@ h1 {
   padding: 3px 9px;
 }
 
+:root[data-theme="dark"] .card-top .badge {
+  color: #05141b;
+}
+
 .card-body {
   flex: 1;
   padding: clamp(18px, 3vw, 26px);
@@ -303,14 +378,14 @@ h1 {
   margin: 0 0 14px;
   font-size: clamp(1.4rem, 3vw, 1.75rem);
   line-height: 1.18;
-  color: #101820;
+  color: var(--heading);
 }
 
 .card-body h3 {
   margin: 0 0 10px;
   font-size: 1.14rem;
   line-height: 1.25;
-  color: #101820;
+  color: var(--heading);
 }
 
 .card-body p {
@@ -324,7 +399,7 @@ h1 {
 }
 
 .card-body strong {
-  color: var(--go-dark);
+  color: var(--accent-text);
 }
 
 /* feature card gets a touch more presence */
@@ -352,10 +427,15 @@ h1 {
   padding: 4px 8px;
 }
 
+:root[data-theme="dark"] .chips li {
+  background: rgba(62, 203, 139, 0.1);
+  border-color: rgba(62, 203, 139, 0.32);
+}
+
 code {
   font-family: var(--mono);
   font-size: 0.88em;
-  color: var(--go-dark);
+  color: var(--accent-text);
   background: rgba(0, 173, 216, 0.1);
   border: 1px solid rgba(0, 173, 216, 0.22);
   border-radius: 5px;
@@ -378,7 +458,7 @@ code {
   padding: 12px 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--card);
   font-family: var(--mono);
 }
 
