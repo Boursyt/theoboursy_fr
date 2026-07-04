@@ -26,23 +26,47 @@
           }
         } catch (e) {}
         document.addEventListener("DOMContentLoaded", function () {
-          var btn = document.querySelector(".theme-toggle");
-          if (!btn) return;
-          btn.addEventListener("click", function () {
-            var isDark = root.getAttribute("data-theme") === "dark";
-            if (isDark) { root.removeAttribute("data-theme"); } else { root.setAttribute("data-theme", "dark"); }
-            try { localStorage.setItem("theme", isDark ? "light" : "dark"); } catch (e) {}
-          });
+          var toggle = document.querySelector(".theme-toggle");
+          if (toggle) {
+            toggle.addEventListener("click", function () {
+              var isDark = root.getAttribute("data-theme") === "dark";
+              if (isDark) { root.removeAttribute("data-theme"); } else { root.setAttribute("data-theme", "dark"); }
+              try { localStorage.setItem("theme", isDark ? "light" : "dark"); } catch (e) {}
+            });
+          }
+          var burger = document.querySelector(".nav-burger");
+          var nav = document.querySelector(".topnav");
+          if (burger && nav) {
+            var setOpen = function (open) {
+              nav.classList.toggle("open", open);
+              burger.classList.toggle("open", open);
+              burger.setAttribute("aria-expanded", open ? "true" : "false");
+            };
+            burger.addEventListener("click", function (e) {
+              e.stopPropagation();
+              setOpen(!nav.classList.contains("open"));
+            });
+            nav.addEventListener("click", function (e) {
+              if (e.target.tagName === "A") setOpen(false);
+            });
+            document.addEventListener("click", function (e) {
+              if (nav.classList.contains("open") && !nav.contains(e.target) && !burger.contains(e.target)) setOpen(false);
+            });
+          }
         });
       })();
     </script>
   </head>
-  <body>
+  <body class="site-app">
     <div class="shell-grid" aria-hidden="true"></div>
 
     <header class="topbar">
       <div class="topbar-inner">
         <span class="brand"><span class="brand-prompt">~/theoboursy.fr/portfolio</span> <span class="cursor">█</span></span>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">
+          <span class="ico-open" aria-hidden="true">☰</span>
+          <span class="ico-close" aria-hidden="true">✕</span>
+        </button>
         <nav class="topnav" aria-label="Primary navigation">
           <a href="https://www.theoboursy.fr">home</a>
           <a href="https://github.com/Boursyt/theoboursy_fr">github</a>

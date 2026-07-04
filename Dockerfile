@@ -8,8 +8,11 @@ FROM golang:1.22-alpine AS build
 ARG SITE
 WORKDIR /src
 COPY server/go.mod server/main.go ./
-COPY ${SITE}/index.html ${SITE}/404.html ./
-COPY ${SITE}/assets ./assets
+# Shared assets (common stylesheet + favicon) come first, then the site's own
+# files (index.html, 404.html, and any site-specific assets like an image) are
+# layered on top — a site can add or override a shared file by name.
+COPY assets ./assets
+COPY ${SITE}/ ./
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /server .
 
 # --- runtime: single binary on scratch, ~0 cold start ---

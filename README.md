@@ -15,6 +15,7 @@ The project avoids traditional bucket hosting. Each site is packaged into a tiny
 | [`monitoring/`](monitoring/) | Project page for the `infra-monitoring` cross-cloud Grafana platform, served on `monitoring.theoboursy.fr`. |
 | [`dockeronline/`](dockeronline/) | Project page for the `M1_dockerOnline` self-service container platform, served on `dockeronline.theoboursy.fr`. |
 | [`gopher/`](gopher/) | Project page for the `hall_of_gopher` Go image-gallery app, served on `gopher.theoboursy.fr`. |
+| [`assets/`](assets/) | Shared assets (the common stylesheet) copied into every site image at build time; a site can override any file by shipping its own copy under `<site>/assets/`. |
 | [`server/`](server/) | Shared Go static-file server using `embed.FS` to compile site assets into the binary. |
 | [`IaC/`](IaC/) | Terraform configuration for Cloud Run v2, Cloud DNS, domain mappings and IAM. |
 | [`.github/workflows/`](.github/workflows/) | GitHub Actions workflows for image builds and Terraform deployment. |
