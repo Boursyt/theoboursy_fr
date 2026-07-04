@@ -12,7 +12,7 @@ import (
 // Site content is copied next to this file at build time (see Dockerfile),
 // so the same server binary serves any of the static sites.
 //
-//go:embed index.html 404.html assets
+//go:embed index.html 404.html legal.html assets
 var content embed.FS
 
 func main() {

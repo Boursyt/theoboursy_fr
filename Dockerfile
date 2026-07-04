@@ -11,7 +11,9 @@ COPY server/go.mod server/main.go ./
 # Shared assets (common stylesheet + favicon) come first, then the site's own
 # files (index.html, 404.html, and any site-specific assets like an image) are
 # layered on top — a site can add or override a shared file by name.
-COPY assets ./assets
+COPY common/assets ./assets
+# Shared legal notice, identical on every subdomain (served at /legal.html).
+COPY common/legal/index.html ./legal.html
 COPY ${SITE}/ ./
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /server .
 

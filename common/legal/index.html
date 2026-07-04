@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Legal notice — theoboursy.fr" />
+    <meta name="robots" content="noindex" />
+    <title>Legal notice — Théo Boursy</title>
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "dark" || (!stored && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches)) {
+            root.setAttribute("data-theme", "dark");
+          }
+        } catch (e) {}
+        document.addEventListener("DOMContentLoaded", function () {
+          var toggle = document.querySelector(".theme-toggle");
+          if (toggle) {
+            toggle.addEventListener("click", function () {
+              var isDark = root.getAttribute("data-theme") === "dark";
+              if (isDark) { root.removeAttribute("data-theme"); } else { root.setAttribute("data-theme", "dark"); }
+              try { localStorage.setItem("theme", isDark ? "light" : "dark"); } catch (e) {}
+            });
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body class="site-www">
+    <div class="grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="prompt">~/theoboursy.fr/legal</span> <span class="cursor">█</span></span>
+        <nav class="topnav">
+          <a href="/">home</a>
+          <a href="https://github.com/Boursyt">github</a>
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+            <span class="icon-dark" aria-hidden="true">☾</span>
+            <span class="icon-light" aria-hidden="true">☀</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div class="window">
+          <div class="window-bar">
+            <span class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+            <span class="window-title">legal.md — less</span>
+          </div>
+          <div class="window-body legal">
+            <p class="eyebrow"><span class="dot"></span>// legal notice</p>
+            <h1 id="title">Legal notice</h1>
+
+            <h2># Site publisher</h2>
+            <p>
+              This personal, non-commercial website is published privately by
+              <strong>Théo Boursy</strong>, as an individual.
+            </p>
+            <ul class="legal-contact" aria-label="Contact">
+              <li>
+                <span class="k">github</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <a href="https://github.com/Boursyt">github.com/Boursyt</a>
+              </li>
+              <li>
+                <span class="k">email</span>
+                <span class="arrow" aria-hidden="true">→</span>
+                <a href="mailto:boursyt@gmail.com">boursyt@gmail.com</a>
+              </li>
+            </ul>
+            <p class="comment">
+              /* Non-professional publisher under Article 6 III 2 of the French
+              &nbsp;* LCEN: full contact details are not made public but are kept
+              &nbsp;* available to the host. */
+            </p>
+
+            <h2># Host</h2>
+            <p>
+              The site is hosted on <strong>Google Cloud Platform</strong>
+              (Cloud Run), region <code>europe-west1</code> (Belgium, European
+              Union).
+            </p>
+            <p>
+              Google Cloud EMEA Limited — Velasco, Clanwilliam Place, Dublin 2,
+              Ireland —
+              <a href="https://cloud.google.com">cloud.google.com</a>.
+            </p>
+
+            <h2># Personal data &amp; cookies</h2>
+            <p>
+              This site <strong>collects no personal data</strong>, uses
+              <strong>no cookies</strong>, no trackers and no analytics. Fonts
+              are self-hosted: no data is sent to any third-party service while
+              browsing.
+            </p>
+            <p>
+              Only the technical data strictly required to serve the pages (IP
+              address, server logs) may be processed transiently by the host, on
+              the basis of its legitimate interest, with no retention for
+              tracking purposes.
+            </p>
+
+            <h2># Intellectual property</h2>
+            <p>
+              Unless otherwise stated, the content of this site is published by
+              its author. The source code of the projects shown is available on
+              <a href="https://github.com/Boursyt">GitHub</a> under the licenses
+              indicated there.
+            </p>
+
+            <div class="actions">
+              <a class="button primary" href="/">
+                <span class="sigil">$</span> cd ~/
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span class="seg branch" aria-hidden="true"><span class="git">⎇</span> main</span>
+      <span class="seg" aria-hidden="true">UTF-8</span>
+      <span class="seg" aria-hidden="true">LF</span>
+      <span class="seg" aria-current="page">legal</span>
+      <span class="seg right" aria-hidden="true">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>
