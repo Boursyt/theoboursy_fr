@@ -738,6 +738,18 @@ main {
   }
 }
 
+@media (max-width: 480px) {
+  /* on phones the filename + up to 3 tags overflow the card bar:
+     drop the decorative filename and let the tags sit on the left */
+  .site-www .card-bar .file {
+    display: none;
+  }
+
+  .site-www .card-bar .file + .tag {
+    margin-left: 0;
+  }
+}
+
 /* =====================================================================
    ascii  (img2ascii — terminal style)
    ===================================================================== */
