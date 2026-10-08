@@ -832,6 +832,12 @@ main {
   border-color: rgba(12, 75, 51, 0.4);
 }
 
+.site-www .card-bar .tag.k8s {
+  color: #326ce5;
+  background: #eaf0fd;
+  border-color: rgba(50, 108, 229, 0.45);
+}
+
 .site-www .card-bar .tag.python {
   color: #8a6d00;
   background: #fbf4d1;
