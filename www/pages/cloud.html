@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="theoboursy cloud — private Nextcloud" />
+        <title>Cloud — Théo Boursy</title>
+    <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "dark" || (!stored && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches)) {
+            root.setAttribute("data-theme", "dark");
+          }
+        } catch (e) {}
+        document.addEventListener("DOMContentLoaded", function () {
+          var toggle = document.querySelector(".theme-toggle");
+          if (toggle) {
+            toggle.addEventListener("click", function () {
+              var isDark = root.getAttribute("data-theme") === "dark";
+              if (isDark) { root.removeAttribute("data-theme"); } else { root.setAttribute("data-theme", "dark"); }
+              try { localStorage.setItem("theme", isDark ? "light" : "dark"); } catch (e) {}
+            });
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body class="site-www">
+    <div class="grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="prompt">~/theoboursy.fr/cloud</span> <span class="cursor">█</span></span>
+        <nav class="topnav">
+          <a href="/">home</a>
+          <a href="/cloud">cloud</a>
+          <a href="/cloud/privacy">privacy</a>
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+            <span class="icon-dark" aria-hidden="true">☾</span>
+            <span class="icon-light" aria-hidden="true">☀</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div class="window">
+          <div class="window-bar">
+            <span class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+            <span class="window-title">cloud.md — less</span>
+          </div>
+          <div class="window-body legal">
+            <p class="eyebrow"><span class="dot"></span>// theoboursy cloud</p>
+            <h1 id="title">theoboursy cloud</h1>
+            <p>
+              <strong>theoboursy cloud</strong> is a private <a href="https://nextcloud.com">Nextcloud</a>
+              instance run by Théo Boursy on his own servers in France, for himself and a few people he
+              invites.
+            </p>
+
+            <h2># What it does</h2>
+            <ul>
+              <li>store, sync and share files</li>
+              <li>calendars, contacts and notes</li>
+              <li>edit documents, spreadsheets and presentations in the browser</li>
+            </ul>
+
+            <h2># Who can use it</h2>
+            <p>
+              Invitation only: an account must be created by the administrator before its owner can sign
+              in. There is no public sign-up.
+            </p>
+
+            <h2># Signing in</h2>
+            <p>
+              Sign-in uses <strong>Sign in with Google</strong>, so no password is stored on this service.
+              It only asks Google for your name, email address and profile picture, to identify your
+              account. See the <a href="/cloud/privacy">privacy policy</a>.
+            </p>
+
+            <div class="actions">
+              <a class="button primary" href="https://cloud.lab.pub.theoboursy.fr">
+                <span class="sigil">$</span> open cloud
+              </a>
+              <a class="button" href="/cloud/privacy">
+                <span class="sigil">$</span> privacy
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span class="seg branch" aria-hidden="true"><span class="git">⎇</span> main</span>
+      <span class="seg" aria-hidden="true">UTF-8</span>
+      <span class="seg" aria-hidden="true">LF</span>
+      <span class="seg" aria-current="page">cloud</span>
+      <span class="seg right" aria-hidden="true">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>

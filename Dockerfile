@@ -14,6 +14,8 @@ COPY server/go.mod server/main.go ./
 COPY common/assets ./assets
 # Shared legal notice, identical on every subdomain (served at /legal.html).
 COPY common/legal/index.html ./legal.html
+# Optional extra pages (pages/<name>.html served at /<name>); empty for most sites.
+RUN mkdir -p pages && touch pages/.keep
 COPY ${SITE}/ ./
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /server .
 

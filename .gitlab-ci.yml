@@ -1,0 +1,109 @@
+# Build one image per site, then plan and (manually) apply the Terraform infrastructure.
+# Google Cloud access: Workload Identity Federation with GitLab ID tokens, no long-lived key.
+# Project CI/CD variables: PROJECT_ID, REGION, AR_REPO, DOMAIN, DNS_ZONE_NAME, TFSTATE_BUCKET,
+# SERVICE_ACCOUNT, WORKLOAD_IDENTITY_PROVIDER (projects/…/providers/gitlab).
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+stages: [build, plan, apply]
+
+default:
+  id_tokens:
+    GCP_ID_TOKEN:
+      aud: https://iam.googleapis.com/$WORKLOAD_IDENTITY_PROVIDER
+
+build:
+  stage: build
+  image: docker:29.9.3-cli
+  services: [docker:29.9.3-dind]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "merge_request_event"
+  parallel:
+    matrix:
+      - { SITE: www, IMAGE: theoboursy-www }
+      - { SITE: img2ascii, IMAGE: theoboursy-ascii }
+      - { SITE: portfolio, IMAGE: theoboursy-portfolio }
+      - { SITE: loadtest, IMAGE: theoboursy-loadtest }
+      - { SITE: monitoring, IMAGE: theoboursy-monitoring }
+      - { SITE: dockeronline, IMAGE: theoboursy-dockeronline }
+      - { SITE: gopher, IMAGE: theoboursy-gopher }
+  script:
+    - apk add --no-cache curl jq
+    # GitLab ID token -> federated token -> service account access token
+    - |
+      fed=$(curl -sf https://sts.googleapis.com/v1/token \
+        -d grant_type=urn:ietf:params:oauth:grant-type:token-exchange \
+        -d audience=//iam.googleapis.com/$WORKLOAD_IDENTITY_PROVIDER \
+        -d scope=https://www.googleapis.com/auth/cloud-platform \
+        -d requested_token_type=urn:ietf:params:oauth:token-type:access_token \
+        -d subject_token_type=urn:ietf:params:oauth:token-type:jwt \
+        -d subject_token="$GCP_ID_TOKEN" | jq -r .access_token)
+      token=$(curl -sf -H "Authorization: Bearer $fed" -H "Content-Type: application/json" -d '{"scope":["https://www.googleapis.com/auth/cloud-platform"]}' \
+        "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$SERVICE_ACCOUNT:generateAccessToken" | jq -r .accessToken)
+      echo "$token" | docker login -u oauth2accesstoken --password-stdin "https://$REGION-docker.pkg.dev"
+    - docker buildx create --use --driver docker-container
+    - |
+      repo=$REGION-docker.pkg.dev/$PROJECT_ID/$AR_REPO/$IMAGE
+      docker buildx build --push --build-arg SITE=$SITE \
+        --cache-from type=registry,ref=$repo:buildcache \
+        --cache-to type=registry,ref=$repo:buildcache,mode=max \
+        -t $repo:$CI_COMMIT_SHA -t $repo:latest .
+
+.terraform:
+  image:
+    name: hashicorp/terraform:1.17.1
+    entrypoint: [""]
+  variables:
+    TF_VAR_project_id: $PROJECT_ID
+    TF_VAR_region: $REGION
+    TF_VAR_domain: $DOMAIN
+    TF_VAR_dns_zone_name: $DNS_ZONE_NAME
+    TF_VAR_image_tag: $CI_COMMIT_SHA
+    GOOGLE_APPLICATION_CREDENTIALS: $CI_BUILDS_DIR/gcp-credentials.json
+  before_script:
+    - echo "$GCP_ID_TOKEN" > "$CI_BUILDS_DIR/gcp-id-token"
+    - |
+      cat > "$GOOGLE_APPLICATION_CREDENTIALS" <<EOF
+      {
+        "type": "external_account",
+        "audience": "//iam.googleapis.com/$WORKLOAD_IDENTITY_PROVIDER",
+        "subject_token_type": "urn:ietf:params:oauth:token-type:jwt",
+        "token_url": "https://sts.googleapis.com/v1/token",
+        "credential_source": { "file": "$CI_BUILDS_DIR/gcp-id-token" },
+        "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$SERVICE_ACCOUNT:generateAccessToken"
+      }
+      EOF
+    - cd IaC
+    - terraform init -input=false -backend-config="bucket=$TFSTATE_BUCKET" -backend-config="prefix=infra"
+
+plan:
+  extends: .terraform
+  stage: plan
+  needs:
+    - job: build
+      optional: true
+  script:
+    - terraform plan -input=false -out=tfplan.out
+    - terraform show -no-color tfplan.out > plan.txt
+  artifacts:
+    paths: [IaC/tfplan.out, IaC/plan.txt]
+    expire_in: 1 week
+
+# manual approval: read the plan job log, then start this job
+apply:
+  extends: .terraform
+  stage: apply
+  needs: [plan]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  environment: prod
+  script:
+    - terraform apply -input=false -auto-approve tfplan.out

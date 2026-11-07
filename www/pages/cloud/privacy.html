@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Privacy policy — theoboursy cloud" />
+        <title>Privacy policy — Théo Boursy</title>
+    <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "dark" || (!stored && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches)) {
+            root.setAttribute("data-theme", "dark");
+          }
+        } catch (e) {}
+        document.addEventListener("DOMContentLoaded", function () {
+          var toggle = document.querySelector(".theme-toggle");
+          if (toggle) {
+            toggle.addEventListener("click", function () {
+              var isDark = root.getAttribute("data-theme") === "dark";
+              if (isDark) { root.removeAttribute("data-theme"); } else { root.setAttribute("data-theme", "dark"); }
+              try { localStorage.setItem("theme", isDark ? "light" : "dark"); } catch (e) {}
+            });
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body class="site-www">
+    <div class="grid" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand"><span class="prompt">~/theoboursy.fr/cloud/privacy</span> <span class="cursor">█</span></span>
+        <nav class="topnav">
+          <a href="/">home</a>
+          <a href="/cloud">cloud</a>
+          <a href="/cloud/privacy">privacy</a>
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+            <span class="icon-dark" aria-hidden="true">☾</span>
+            <span class="icon-light" aria-hidden="true">☀</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div class="window">
+          <div class="window-bar">
+            <span class="traffic"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+            <span class="window-title">privacy.md — less</span>
+          </div>
+          <div class="window-body legal">
+            <p class="eyebrow"><span class="dot"></span>// privacy policy</p>
+            <h1 id="title">Privacy policy — theoboursy cloud</h1>
+            <p>
+              This policy covers <strong>theoboursy cloud</strong>
+              (<a href="https://cloud.lab.pub.theoboursy.fr">cloud.lab.pub.theoboursy.fr</a>), a private
+              Nextcloud instance. Last update: November 2026.
+            </p>
+
+            <h2># Data controller</h2>
+            <p>
+              Théo Boursy, as an individual —
+              <a href="mailto:boursyt@gmail.com">boursyt@gmail.com</a>.
+            </p>
+
+            <h2># Data received from Google</h2>
+            <p>
+              When you choose <strong>Sign in with Google</strong>, the service receives from Google only
+              your <strong>name</strong>, <strong>email address</strong> and <strong>profile picture</strong>
+              (scopes <code>openid</code>, <code>email</code>, <code>profile</code>). They are used only to
+              sign you in and to show your name in the service. No other Google data (Drive, Gmail,
+              contacts…) is accessed.
+            </p>
+            <p>
+              The use and transfer of information received from Google APIs adhere to the
+              <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API
+              Services User Data Policy</a>, including the Limited Use requirements.
+            </p>
+
+            <h2># Data you store</h2>
+            <p>
+              Files, calendars, contacts and other content you add are stored on the administrator's own
+              servers in France. Encrypted backups are kept in Google Cloud Storage in the European Union
+              (Paris region).
+            </p>
+
+            <h2># Sharing</h2>
+            <p>
+              Your data is <strong>never sold, shared or used for advertising</strong>. There are no
+              analytics and no trackers. Only strictly necessary session cookies are used.
+            </p>
+
+            <h2># Retention and deletion</h2>
+            <p>
+              Data is kept while your account exists. Ask for deletion at any time by email: your
+              account and content are deleted within 30 days, and disappear from rotating backups within
+              12 months.
+            </p>
+
+            <h2># Your rights</h2>
+            <p>
+              Under the GDPR you can access, correct, export or delete your data by writing to the
+              address above. You may also lodge a complaint with the
+              <a href="https://www.cnil.fr">CNIL</a>.
+            </p>
+
+            <div class="actions">
+              <a class="button primary" href="/cloud">
+                <span class="sigil">$</span> cd ~/cloud
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span class="seg branch" aria-hidden="true"><span class="git">⎇</span> main</span>
+      <span class="seg" aria-hidden="true">UTF-8</span>
+      <span class="seg" aria-hidden="true">LF</span>
+      <span class="seg" aria-current="page">privacy</span>
+      <span class="seg right" aria-hidden="true">© Théo Boursy</span>
+    </footer>
+  </body>
+</html>
