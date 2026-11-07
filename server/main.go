@@ -12,7 +12,7 @@ import (
 // Site content is copied next to this file at build time (see Dockerfile),
 // so the same server binary serves any of the static sites.
 //
-//go:embed index.html 404.html legal.html assets
+//go:embed index.html 404.html legal.html assets all:pages
 var content embed.FS
 
 func main() {
@@ -33,6 +33,13 @@ func main() {
 		name := strings.TrimPrefix(r.URL.Path, "/")
 		if name == "" {
 			name = "index.html"
+		}
+
+		// Optional site pages without extension: /cloud -> pages/cloud.html.
+		if page, err := content.ReadFile("pages/" + strings.TrimSuffix(name, "/") + ".html"); err == nil {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			_, _ = w.Write(page)
+			return
 		}
 
 		// Unknown path -> serve the custom 404 page.

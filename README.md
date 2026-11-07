@@ -18,14 +18,15 @@ The project avoids traditional bucket hosting. Each site is packaged into a tiny
 | [`assets/`](assets/) | Shared assets (the common stylesheet) copied into every site image at build time; a site can override any file by shipping its own copy under `<site>/assets/`. |
 | [`server/`](server/) | Shared Go static-file server using `embed.FS` to compile site assets into the binary. |
 | [`IaC/`](IaC/) | Terraform configuration for Cloud Run v2, Cloud DNS, domain mappings and IAM. |
-| [`.github/workflows/`](.github/workflows/) | GitHub Actions workflows for image builds and Terraform deployment. |
+| [`.gitlab-ci.yml`](.gitlab-ci.yml) | GitLab CI: image builds and Terraform deployment. |
+| [`.github/workflows/`](.github/workflows/) | Former GitHub Actions workflows, kept for reference; Actions is disabled on the GitHub mirror. |
 | [`Dockerfile`](Dockerfile) | Multi-stage Docker build that selects a site with `--build-arg SITE=<site>`. |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  dev[Push to main] --> gha[GitHub Actions]
+  dev[Push to main] --> gha[GitLab CI]
   gha --> build[Build matrix]
   build --> ar[Artifact Registry]
   gha --> tf[Terraform plan/apply]
@@ -40,6 +41,7 @@ flowchart LR
 
 - **Backend:** one generic Go HTTP server reused by every static app.
 - **Assets:** `index.html`, `404.html` and `assets/` are embedded at build time with `embed.FS`.
+- **Extra pages:** a site may ship `pages/<name>.html`, served at `/<name>` (e.g. `www/pages/cloud.html` at `/cloud`).
 - **Images:** multi-stage Docker builds compile a static Go binary and run it from `scratch`.
 - **Serving:** unknown paths return the embedded custom `404.html`.
 - **Port:** Cloud Run and local containers serve on `8080`.
@@ -54,10 +56,11 @@ flowchart LR
 
 ### CI/CD
 
-- [`build.yml`](.github/workflows/build.yml) builds and pushes one container image per site to Artifact Registry.
-- [`deploy.yml`](.github/workflows/deploy.yml) runs Terraform plan, uploads the plan artifact and applies it after manual approval.
-- Authentication uses Google Workload Identity Federation through GitHub OIDC, so no long-lived GCP service account key is required.
-- Images are tagged with both `github.sha` and `latest`; Terraform deploys the immutable `github.sha` tag.
+- Source of truth: GitLab (`gitlab.com/Boursyt/theoboursy_fr`), push-mirrored to GitHub.
+- [`.gitlab-ci.yml`](.gitlab-ci.yml) on `main`: `build` (one image per site to Artifact Registry), `plan`, then `apply` started by hand after reading the plan. Merge requests only run `plan`.
+- Authentication uses Google Workload Identity Federation with GitLab ID tokens (provider `gitlab` in the `github` pool, limited to this project), so no long-lived GCP service account key is required. The pool, providers and service account are made by hand.
+- CI/CD variables are project variables in GitLab (`PROJECT_ID`, `REGION`, `AR_REPO`, `DOMAIN`, `DNS_ZONE_NAME`, `TFSTATE_BUCKET`, `SERVICE_ACCOUNT`, `WORKLOAD_IDENTITY_PROVIDER`).
+- Images are tagged with both the commit SHA and `latest`; Terraform deploys the immutable SHA tag.
 
 ## Apps And Domains
 
